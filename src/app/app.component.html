@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="page-header">
+    <h1>Available properties</h1>
+  </div>
+  <div class="header">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label for="txtTags" class="col-sm-2 control-label">Tags</label>
+        <div class="col-sm-10">
+          <input #txtTags type="text" name="tags" class="form-control" (keyup)="filter(txtTags.value)" />
+          <ul>
+            <li *ngFor="let tag of tags | async" (click)="addTag(tag);txtTags.value=''">{{ tag }}</li>
+          </ul>
+        </div>
+      </div>
+    </form>
+    <div class="panel panel-default">
+      <div class="panel-heading">Current tags</div>
+      <div class="panel-body">
+        <button *ngFor="let tag of currentTags" class="btn btn-success">{{ tag }}</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-striped">
+        <thead>
+          <tr><th>#</th><th>Address</th><th>Rent</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let property of properties; index as i">
+            <td>{{ i + 1 }}</td>
+            <td>{{ property.address }}</td>
+            <td>{{ property.targetRent }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

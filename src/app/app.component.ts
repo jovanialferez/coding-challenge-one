@@ -30,23 +30,34 @@ export class AppComponent implements OnInit {
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap(term => term ? Observable.of(this.propertyService.getTags(term)): Observable.of([]));
+    
+    this.updateListings();
+  }
+
+  updateListings() {
     this.propertyService
-      .getAvailableProperties()
+      .getAvailableProperties(this.currentTags)
       .subscribe(properties => this.properties = properties);
   }
 
-  filter(tag:string) {
+  // the auto-suggest feature
+  filter(tag: string) {
     this.tagsFilter.next(tag);
   }
 
-  addTag(tag:string) {
+  addTag(tag: string) {
     if (this.currentTags.indexOf(tag) === -1) {
       this.currentTags.push(tag);
     }
     this.tagsFilter.next(''); // reset the sugggestions
 
-    this.propertyService
-      .getAvailableProperties(this.currentTags)
-      .subscribe(properties => this.properties = properties);
+    this.updateListings();
+  }
+
+  removeTag(tag: string) {
+    let index = this.currentTags.indexOf(tag);
+    this.currentTags.splice(index, 1);
+
+    this.updateListings();
   }
 }

@@ -38,12 +38,27 @@ export class PropertyService {
       let properties = this.properties.filter(item => {
         if (!item.defaultImage) return false;
 
+        // a single match should do
         for (let tag of tags) {
           if (item.defaultImage.labels[tag]) return true;
         }
 
         return false;
       });
+
+      // makes sense to add up the confidence ratings
+      // and use it for sorting
+      properties.map(item => {
+        item.totalRatings = 0;
+        for (let tag of tags) {
+          if (item.defaultImage.labels[tag]) item.totalRatings += item.defaultImage.labels[tag];
+        }
+      });
+
+      // highest ratings first
+      properties.sort((a, b) => {
+        return b.totalRatings - a.totalRatings;
+      })
 
       return Observable.of(properties);
     }

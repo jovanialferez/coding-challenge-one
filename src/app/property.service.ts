@@ -16,8 +16,9 @@ export class PropertyService {
   getAvailableProperties(tags?: string[]): Observable<any[]> {
     // fetch if we dont have it yet
     if (this.properties.length == 0) {
+       // with this live endpoint, browser is sending pre-flight CORS and causing request error
       return this.http
-        .post('http://localhost:8000/api/Property/availableProperties', {})
+        .post('http://www.onerent.co/api/Property/availableProperties', {})
         .map((response:Response) => {
           this.properties = response.json();
           for (let i = 0; i < this.properties.length; i++) {

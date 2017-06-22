@@ -14,6 +14,7 @@ export class PropertyService {
   }
 
   getAvailableProperties(tags?: string[]): Observable<any[]> {
+    // fetch if we dont have it yet
     if (this.properties.length == 0) {
       return this.http
         .post('http://localhost:8000/api/Property/availableProperties', {})
@@ -32,7 +33,7 @@ export class PropertyService {
           return this.properties;
         })
     }
-
+    
     if (tags && tags.length) {
       let properties = this.properties.filter(item => {
         if (!item.defaultImage) return false;
@@ -47,7 +48,8 @@ export class PropertyService {
       return Observable.of(properties);
     }
 
-    return Observable.of([]);
+    // tags is empty, return all the properties
+    return Observable.of(this.properties);
   }
 
   getTags(q: string): string[] {
